@@ -1,0 +1,58 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'fstyle.css'%}">
+</head>
+
+<body>
+    <div id="info">
+        <h1 id="inf">Welcome to Interview Prep Buddy</h1>
+    </div>
+    <div id="auth">
+        <div id="but">
+
+            <div id="col"></div>
+            <button class="tog" id="SI" onclick="togg1()">Sign In</button> <button class="tog" onclick="togg2()">Sign
+                Up</button>
+        </div>
+        <div id="bar">
+            {% if messages%}
+            {% for message in messages %}
+            <p id="msg" class="{{ message.tags }}">
+                {{ message }}
+            </p>
+            {% endfor %}
+            {% endif %}
+
+            <div id="log" class="ath">
+                <form action="login" method="post">
+                    {% csrf_token %}
+                    <input type="text" id="email" name="email" class="inp">
+                    <input type="text" id="password" name="pass" class="inp">
+                    <input type="submit" id="sub" class="inp" value="Submit">
+
+                </form>
+
+            </div>
+            <div id="sig" class="ath">
+                <form action="signup" method="post">
+                    {% csrf_token %}
+                    <input type="text" id="Semail" name="semail" class="inp">
+                    <input type="text" id="Spassword" name="spass" class="inp">
+                    <input type="text" id="SCpassword" name="scpass" class="inp">
+                    <input type="submit" id="Ssub" class="inp" value="Submit">
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script src="{% static 'homepa.js'%}"></script>
+</body>
+
+</html>

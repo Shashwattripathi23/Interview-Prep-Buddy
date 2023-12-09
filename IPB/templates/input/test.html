@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Upload Form</title>
+</head>
+
+<body>
+
+    <h2>Upload PDF</h2>
+
+    <form id="pdfForm">
+        <label for="pdfInput">Choose a PDF file:</label>
+        <input type="file" id="pdfInput" name="pdfFile" accept=".pdf">
+        <button type="button" onclick="uploadPDF()">Upload PDF</button>
+    </form>
+
+    <script>
+        function uploadPDF() {
+            // Get the input element
+            const pdfInput = document.getElementById('pdfInput');
+
+            // Get the selected file
+            const file = pdfInput.files[0];
+
+            // Check if a file is selected
+            if (file) {
+                // You can handle the file here, e.g., upload it to a server
+
+                // For demonstration purposes, log the file details
+                console.log('File Name:', file.name);
+                console.log('File Type:', file.type);
+                console.log('File Size:', file.size, 'bytes');
+            } else {
+                alert('Please choose a PDF file.');
+            }
+        }
+    </script>
+
+</body>
+
+</html>
