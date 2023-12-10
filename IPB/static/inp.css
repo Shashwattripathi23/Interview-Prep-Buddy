@@ -117,13 +117,19 @@ height: 7vh;
     left: 20%;
     display: flex;
     color: white;
-    box-shadow: 1px 1px 300px 1px  white;
+    box-shadow: 1px 1px 400px 1px  white;
    
 }
-.inpp:hover{
+/* .inpp:not(:hover){
     transform: translateY(-0.8vh);
     border: none;
-    box-shadow: 1px 1px 30px 5px  white;
+    box-shadow: 1px 1px 300px 1px  white;
+} */
+/* .inpp:hover ~ .inpp {
+    box-shadow: 1px 1px 30px 5px white; /* remove shadow from non-hovered elements */
+/* } */ 
+.inpp:hover {
+    box-shadow: 1px 1px 30px 5px white; /* increased shadow on hovered element */
 }
 
 #com{margin-top: 10vh;}

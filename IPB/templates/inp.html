@@ -27,7 +27,7 @@
     <div id="main">
         <form action="generate" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div id="com" class="inpp">
+            <div id="com" onmouseover="toggleshadow(this)" class="inpp">
                 <h2 style="position: relative; left: 0.5vw;">Which company are you targeting?</h2>
                 <label for="coml"></label>
                 <select id="coml" name="coml">
@@ -37,7 +37,7 @@
                     <option value="Amazon">Amazon</option>
                 </select>
             </div>
-            <div id="pos" class="inpp">
+            <div id="pos" onmouseover="toggleshadow(this)" class="inpp">
                 <h2 style="position: relative; left: 0.5vw;">Which role are you applying for?</h2>
                 <label for="posl"></label>
                 <select id="posl" name="posl">
@@ -47,7 +47,7 @@
                     <option value="Backend Developer">Backend Developer</option>
                 </select>
             </div>
-            <div id="res" class="inpp">
+            <div id="res" onmouseover="toggleshadow(this)" class="inpp">
                 <h2 style="position: relative; left: 1vh;">Upload Resume:</h2>
                 <input type="file" id="pdf" name="pdfFile" accept=".pdf">
             </div>

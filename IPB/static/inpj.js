@@ -8,6 +8,16 @@ function togg() {
     tog = false;
   }
 }
+function toggleshadow(element) {
+  // Remove the 'inpp-hovered' class from all elements
+  var elements = document.getElementsByClassName("inpp");
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].classList.remove(".inpp:not(:hover)");
+  }
+
+  // Add the 'inpp-hovered' class to the hovered element
+  element.classList.add("inpp-hovered");
+}
 
 // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 //   navigator.mediaDevices

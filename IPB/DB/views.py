@@ -32,7 +32,7 @@ def generate(request):
 
         # Load spaCy's English language model
         nlp = spacy.load(
-            r"C:\Users\SHASHWAT\Desktop\Python\Django\Interview Prep Buddy\IPB\Pymodel")
+            r"C:\Users\SHASHWAT\Desktop\Python\Django\IPB\IPB\Pymodel\27")
 
         # Process the resume text using spaCy
         doc = nlp(resume_text)
