@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="{% static 'inp.css'%}">
+    <link rel="stylesheet" href="{% static 'inp2.css'%}">
 </head>
 
 <body>
@@ -26,20 +26,20 @@
 
     <div id="main">
 
-        <h1 style="color: white; position: relative; left: 23vh;"> Here are some relevant questions:</h1>
-        <div id="ques">
+        <div id="VI" class="intV"></div>
+        <div id="user" class="intV"><video id="webcam" width="640" height="480" autoplay></video></div>
 
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-
+        <div id="viq">
+            <h2 style="color: white;">Question:</h2>
         </div>
-        <input type="button" value="Practise" id="gen">
+
+
+        <input type="button" value="Start" id="startRecording" class="ibut">
+        <input type="button" value="End" id="stopRecording" class="ibut">
 
     </div>
 
-    <script src="{% static inpj.js %}"></script>
+    <script src="{% static 'inpj2.js'%}"></script>
 </body>
 
 </html>
