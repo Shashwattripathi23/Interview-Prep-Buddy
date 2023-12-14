@@ -35,6 +35,12 @@
 
 
         <input type="button" value="Start" id="startRecording" class="ibut">
+        <audio id="audioPlayer" controls></audio>
+        <!-- <form action="submit" method="post"> -->
+        <!-- {% csrf_token %} -->
+        <input type="hidden" id="audioUrlI" name="audioUrl" accept="audio/*" required>
+        <input type="submit" value="Submit" id="submitRecording" class="ibut">
+        <!-- </form> -->
         <input type="button" value="End" id="stopRecording" class="ibut">
 
     </div>

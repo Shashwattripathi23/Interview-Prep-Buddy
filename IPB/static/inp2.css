@@ -269,3 +269,20 @@ height: 7vh;
     background-color: white;
     border-radius: 30px;
 }
+
+#submitRecording{
+    text-align: justify;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    border: 2px solid black;
+    transition: 0.2s linear;
+    font-size: 4vh;
+    position: fixed;
+    top: 78.5vh;
+    height: 6vh;
+    width: 8vw;
+    left: 46%;
+    background-color: white;
+    border-radius: 30px;
+}

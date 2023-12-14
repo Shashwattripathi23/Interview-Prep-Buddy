@@ -1,3 +1,8 @@
+import time
+import wave
+import io
+from pydub import AudioSegment
+import urllib.request
 from django.shortcuts import render
 import json
 from django.http import HttpResponse, JsonResponse
@@ -5,6 +10,9 @@ from PyPDF2 import PdfReader
 from django.views.decorators.csrf import csrf_exempt
 import spacy
 import random
+import requests
+
+import speech_recognition as sr
 
 patt = r'C:\Users\SHASHWAT\Desktop\Python\Django\IPB\IPB\Pymodel\dataset.json'
 
@@ -215,3 +223,50 @@ def regenerate(request):
 
 def practise(request):
     return render(request, 'inter.html')
+
+
+def download_blob(blob_url):
+    response = requests.get(blob_url)
+    return response.content
+
+
+def save_blob_as_wav(blob_content, output_file_path):
+    with wave.open(output_file_path, 'wb') as wav_file:
+        wav_file.setnchannels(1)  # Mono audio
+        wav_file.setsampwidth(2)  # 16-bit audio
+        wav_file.setframerate(44100)  # Sample rate (adjust as needed)
+        wav_file.writeframes(blob_content)
+
+
+def submit(request):
+    if request.method == 'POST':
+        print("Submit function is called!")
+
+        src = request.POST.get('audioUrl', '')  # Use get to avoid KeyError
+        print(src)
+
+        # Download Blob and save as WAV
+        blob_content = download_blob(src)
+        output_file_path = 'output.wav'  # Adjust the output file path as needed
+        save_blob_as_wav(blob_content, output_file_path)
+
+        # Perform other actions with the 'src' variable or 'output_file_path' as needed
+
+        return JsonResponse({'status': 'success', 'message': 'Audio Blob converted and saved as WAV.'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+
+@csrf_exempt
+def upload_audio(request):
+    if request.method == 'POST' and 'audio' in request.FILES:
+        audio_file = request.FILES['audio']
+        # Handle the audio file as needed, e.g., save it to the server
+        # For simplicity, let's save it in the media directory
+        with open(f'recordings/{audio_file.name}', 'wb') as destination:
+            for chunk in audio_file.chunks():
+                destination.write(chunk)
+
+        return JsonResponse({'status': 'success', 'message': 'Audio file uploaded successfully'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'})

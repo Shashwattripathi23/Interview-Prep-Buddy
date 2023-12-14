@@ -10,8 +10,9 @@ function togg() {
 }
 
 let webcamStream; // Variable to store the webcam stream
-let mediaRecorder; // Variable to store the media recorder instance
-let audioChunks = []; // Array to store audio chunks
+// let mediaRecorder; // Variable to store the media recorder instance
+// let audioChunks = []; // Array to store audio chunks for the current cycle
+let completeAudioChunks = []; // Array to store complete audio clips
 
 // Check if the browser supports getUserMedia
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -31,83 +32,82 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 }
 
 // Event listener for starting audio recording
-document
-  .getElementById("startRecording")
-  .addEventListener("click", startRecording);
+let mediaRecorder;
+// let audioChunks = [];
 
-// Event listener for stopping audio recording
-document
-  .getElementById("stopRecording")
-  .addEventListener("click", stopRecording);
+const startRecordingButton = document.getElementById("startRecording");
+const stopRecordingButton = document.getElementById("stopRecording");
+const audioPlayer = document.getElementById("audioPlayer");
 
-function startRecording() {
-  // Request access to the user's microphone
-  navigator.mediaDevices
-    .getUserMedia({ audio: true })
-    .then(function (stream) {
-      // Store the microphone stream for later use
-      const microphoneStream = stream;
+audioChunks = [];
+navigator.mediaDevices
+  .getUserMedia({ audio: true })
+  .then((stream) => {
+    mediaRecorder = new MediaRecorder(stream);
 
-      // Create a new MediaRecorder instance for audio recording
-      mediaRecorder = new MediaRecorder(microphoneStream);
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunks.push(event.data);
+      }
+    };
 
-      // Event handler for collecting audio data in chunks
-      mediaRecorder.ondataavailable = function (event) {
-        if (event.data.size > 0) {
-          audioChunks.push(event.data);
-        }
-      };
+    mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      audioPlayer.src = audioUrl;
+      document.getElementById("audioUrlI").value = audioUrl;
+    };
 
-      // Event handler for when recording stops
-      mediaRecorder.onstop = function () {
+    startRecordingButton.addEventListener("click", () => {
+      mediaRecorder.start();
+      startRecordingButton.disabled = true;
+      stopRecordingButton.disabled = false;
+    });
+
+    stopRecordingButton.addEventListener("click", () => {
+      mediaRecorder.stop();
+      startRecordingButton.disabled = false;
+      stopRecordingButton.disabled = true;
+      if (audioChunks.length > 0) {
         const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
 
-        // Send the audio data to the Django backend
-        sendAudioData(audioBlob);
-
-        // Clear the audio chunks for the next recording
-        audioChunks = [];
-      };
-
-      // Start recording
-      mediaRecorder.start();
-
-      // Disable the start button and enable the stop button
-      document.getElementById("startRecording").disabled = true;
-      document.getElementById("stopRecording").disabled = false;
-    })
-    .catch(function (error) {
-      console.error("Error accessing microphone:", error);
-    });
-}
-
-function stopRecording() {
-  if (mediaRecorder && mediaRecorder.state === "recording") {
-    // Stop the recording
-    mediaRecorder.stop();
-
-    // Disable the stop button and enable the start button
-    document.getElementById("startRecording").disabled = false;
-    document.getElementById("stopRecording").disabled = true;
-  }
-}
-
-function sendAudioData(audioBlob) {
-  // Use the Fetch API to send the audio data to the Django backend
-  fetch("/your-backend-endpoint", {
-    method: "POST",
-    body: audioBlob,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+        // Assuming you have a function sendToBackend to send the audio data
+        sendToBackend(audioBlob);
+      } else {
+        console.error("No audio data to submit");
       }
-      return response.json();
-    })
+    });
+  })
+  .catch((error) => console.error("Error accessing microphone:", error));
+
+function sendToBackend(audioBlob) {
+  // Create a FormData object to send the audio Blob to the backend
+  const formData = new FormData();
+  formData.append("audio", audioBlob, "audio.wav");
+
+  // Use fetch or another method to send the FormData to the backend
+  fetch("upload", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
     .then((data) => {
-      console.log("Response from backend:", data);
+      console.log("Backend response:", data);
+      // Add any further handling based on the backend response
     })
     .catch((error) => {
-      console.error("Error sending audio data to backend:", error);
+      console.error("Error sending audio to backend:", error);
     });
+  audioChunks = [];
 }
+const sub = document.getElementById("submitRecording");
+sub.addEventListener("click", () => {
+  if (audioChunks.length > 0) {
+    const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+
+    // Assuming you have a function sendToBackend to send the audio data
+    sendToBackend(audioBlob);
+  } else {
+    console.error("No audio data to submit");
+  }
+});
