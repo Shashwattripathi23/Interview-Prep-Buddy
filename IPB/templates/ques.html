@@ -30,7 +30,7 @@
         <label for="skillInput">Enter a Skill:</label>
         <input type="text" id="skillInput">
         <div id="selectedSkills"></div>
-        <form id="skillsForm" method="post" action="{% url 'regenerate' %}">
+        <form id="skillsForm" method="post" action="{% url 'regenerate' name=name %}">
             {% csrf_token %}
             <input type="hidden" name="selected_skills" id="selectedSkillsInput">
             <button type="button" id="AddS">Add</button>
@@ -56,7 +56,7 @@
 
 
     </div>
-    <a id="gen2" href="{% url 'practise' %}" style="color: black;">Practise</a>
+    <a id="gen2" href="{% url 'practise' name=name %}" style="color: black;">Practise</a>
     <a id="gen3" style="color: black;">Add Skill</a>
 
 

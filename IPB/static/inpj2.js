@@ -32,82 +32,42 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 }
 
 // Event listener for starting audio recording
-let mediaRecorder;
-// let audioChunks = [];
+// let mediaRecorder;
+// // let audioChunks = [];
 
 const startRecordingButton = document.getElementById("startRecording");
 const stopRecordingButton = document.getElementById("stopRecording");
-const audioPlayer = document.getElementById("audioPlayer");
 
-audioChunks = [];
-navigator.mediaDevices
-  .getUserMedia({ audio: true })
-  .then((stream) => {
-    mediaRecorder = new MediaRecorder(stream);
-
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        audioChunks.push(event.data);
-      }
-    };
-
-    mediaRecorder.onstop = () => {
-      const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-      const audioUrl = URL.createObjectURL(audioBlob);
-      audioPlayer.src = audioUrl;
-      document.getElementById("audioUrlI").value = audioUrl;
-    };
-
-    startRecordingButton.addEventListener("click", () => {
-      mediaRecorder.start();
-      startRecordingButton.disabled = true;
-      stopRecordingButton.disabled = false;
-    });
-
-    stopRecordingButton.addEventListener("click", () => {
-      mediaRecorder.stop();
-      startRecordingButton.disabled = false;
-      stopRecordingButton.disabled = true;
-      if (audioChunks.length > 0) {
-        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-
-        // Assuming you have a function sendToBackend to send the audio data
-        sendToBackend(audioBlob);
-      } else {
-        console.error("No audio data to submit");
-      }
-    });
-  })
-  .catch((error) => console.error("Error accessing microphone:", error));
-
-function sendToBackend(audioBlob) {
-  // Create a FormData object to send the audio Blob to the backend
-  const formData = new FormData();
-  formData.append("audio", audioBlob, "audio.wav");
-
-  // Use fetch or another method to send the FormData to the backend
-  fetch("upload", {
+const namea = "{{name}}";
+startRecordingButton.addEventListener("click", function () {
+  fetch("start", {
     method: "POST",
-    body: formData,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}),
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("Backend response:", data);
-      // Add any further handling based on the backend response
+      document.getElementById("output").innerText = data.result;
     })
     .catch((error) => {
-      console.error("Error sending audio to backend:", error);
+      console.error("Error:", error);
     });
-  audioChunks = [];
-}
-const sub = document.getElementById("submitRecording");
-sub.addEventListener("click", () => {
-  if (audioChunks.length > 0) {
-    const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-
-    // Assuming you have a function sendToBackend to send the audio data
-    sendToBackend(audioBlob);
-  } else {
-    console.error("No audio data to submit");
-  }
+});
+stopRecordingButton.addEventListener("click", function () {
+  fetch("end", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("output").innerText = data.result;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 });

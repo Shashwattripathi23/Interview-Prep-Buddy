@@ -30,7 +30,7 @@
             {% endif %}
 
             <div id="log" class="ath">
-                <form action="login" method="post">
+                <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
                     <input type="text" id="email" name="email" class="inp">
                     <input type="text" id="password" name="pass" class="inp">
