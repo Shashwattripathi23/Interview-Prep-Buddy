@@ -4,9 +4,11 @@ from DB import views
 
 
 urlpatterns = [
-    path('generate', views.generate, name='generate'),
-    path('regenerate', views.regenerate, name='regenerate'),
-    path('practise', views.practise, name='practise'),
+    path('<str:name>/generate', views.generate, name='generate'),
+    path('<str:name>/regenerate', views.regenerate, name='regenerate'),
+    path('<str:name>/practise', views.practise, name='practise'),
     # path('submit', views.submit, name='submit'),
-    path('upload', views.upload_audio, name='upload_audio'),
+    # path('upload', views.upload_audio, name='upload_audio'),
+    path('<str:name>/start', views.start, name='start'),
+    path('<str:name>/end',  views.end, name='end'),
 ]
